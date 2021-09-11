@@ -1,8 +1,8 @@
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant
-from helpers.filters import command
-from helpers.decorators import authorized_users_only, errors
+from helper.filters import command
+from helper.decorators import authorized_users_only, errors
 from bot.videoplayer import app as USER
 from config import BOT_USERNAME, SUDO_USERS
 

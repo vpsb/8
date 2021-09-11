@@ -43,7 +43,7 @@ def youtube(url: str):
         return
 
 
-@Client.on_message(command(["play", f"play@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
+@Client.on_message(command(["stream", f"play@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
 async def startvideo(client, m: Message):
     replied = m.reply_to_message
     if not replied:

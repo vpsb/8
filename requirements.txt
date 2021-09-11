@@ -2,7 +2,7 @@ TgCrypto ==1.2.2
 ffmpeg-python
 python-dotenv
 git+https://github.com/pyrogram/pyrogram@master
-git+https://github.com/pytgcalls/pytgcalls@dev --no-cache-dir
+py-tgcalls==0.8.0b3
 tswift
 youtube_search_python
 youtube_search

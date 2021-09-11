@@ -28,10 +28,10 @@ Commands
 - /sysinfo - show the bot system information
 
 **=>> More tools 🧑‍🔧**
-- /userbotjoin: Invite @YuiVideoPlayer Userbot to your chat
+- /join: Invite @YuiVideoPlayer Userbot to your chat
 
 **=>> Commands for Sudo Users ⚔️**
- - /userbotleaveall - remove assistant from all chats
+ - /leaveall - remove assistant from all chats
  - /broadcast <reply to message> - globally brodcast replied message to all chats
 *Sudo Users can execute any command in any groups
 

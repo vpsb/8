@@ -7,7 +7,7 @@ from bot.videoplayer import app as USER
 from config import BOT_USERNAME, SUDO_USERS
 
 
-@Client.on_message(command(["vjoin", f"vjoin@{BOT_USERNAME}"]) & ~filters.private & ~filters.bot)
+@Client.on_message(command(["join", f"join@{BOT_USERNAME}"]) & ~filters.private & ~filters.bot)
 @errors
 async def entergroup(client, message):
     chid = message.chat.id
@@ -42,7 +42,7 @@ async def entergroup(client, message):
     )
 
 
-@Client.on_message(command(["vleave", f"vleave@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
+@Client.on_message(command(["leave", f"leave@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
 async def leavegroup(client, message):
     try:
         await USER.leave_chat(message.chat.id)

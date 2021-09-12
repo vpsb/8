@@ -4,6 +4,7 @@ import subprocess
 from pytgcalls import idle
 from pytgcalls import PyTgCalls
 from pytgcalls import StreamType
+from pytgcalls.types import Update
 from pytgcalls.types.input_stream import AudioParameters
 from pytgcalls.types.input_stream import InputAudioStream
 from pytgcalls.types.input_stream import InputVideoStream
@@ -12,7 +13,7 @@ from pytgcalls.types.input_stream import VideoParameters
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from config import API_ID, API_HASH, SESSION_NAME, BOT_USERNAME
-from helper.filters import command
+from helpers.filters import command
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import ExtractorError
 
@@ -36,14 +37,27 @@ def youtube(url: str):
         params = {"format": "best[height=?480]/best", "noplaylist": True}
         yt = YoutubeDL(params)
         info = yt.extract_info(url, download=False)
-        return info['url']
+        return info['url'], info['title']
     except ExtractorError: # do whatever
         return 
     except Exception:
         return
 
-
-@Client.on_message(command(["stream", f"play@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
+async def leave_call(chat_id: int):
+    process = FFMPEG_PROCESSES.get(chat_id)
+    if process:
+        try:
+            process.send_signal(SIGINT)
+            await asyncio.sleep(3)
+        except Exception as e:
+            print(e)
+            pass
+    try:
+        await call_py.leave_group_call(chat_id)
+    except Exception as e:
+        print(f"Errors while leaving call - {e}")
+        
+@Client.on_message(command(["play", f"play@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
 async def startvideo(client, m: Message):
     replied = m.reply_to_message
     if not replied:
@@ -53,7 +67,7 @@ async def startvideo(client, m: Message):
             livelink = m.text.split(None, 1)[1]
             chat_id = m.chat.id
             try:
-                livelink = await asyncio.wait_for(
+                livelink, title = await asyncio.wait_for(
                     app.loop.run_in_executor(
                         None,
                         lambda : youtube(livelink)
@@ -94,7 +108,10 @@ async def startvideo(client, m: Message):
                     ),
                     stream_type=StreamType().local_stream,
                 )
-                await msg.edit("💡 **Video streaming started!**\n\n» **join to video chat on the top to watch the video.**")
+                await msg.edit(
+                    "💡 **Video streaming started!**\n"
+                    f"**Currently Playing**: {title}\n"
+                    "\n» **join to video chat on the top to watch the video.**")
                 await idle()
             except Exception as e:
                 await msg.edit(f"🚫 **error** | `{e}`")
@@ -148,7 +165,13 @@ async def stopvideo(client, m: Message):
                 await asyncio.sleep(3)
             except Exception as e:
                 print(e)
+                pass
         await call_py.leave_group_call(chat_id)
         await m.reply("✅ **Disconnected from vc !**")
     except Exception as e:
         await m.reply(f"🚫 **Error** | `{e}`")
+
+@call_py.on_stream_end()
+async def handler(client: PyTgCalls, update: Update):
+    chat_id = update.chat.id
+    await leave_call(chat_id)

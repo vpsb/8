@@ -57,7 +57,7 @@ async def leave_call(chat_id: int):
     except Exception as e:
         print(f"Errors while leaving call - {e}")
         
-@Client.on_message(command(["play", f"play@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
+@Client.on_message(command(["stream", f"stream@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
 async def startvideo(client, m: Message):
     replied = m.reply_to_message
     if not replied:

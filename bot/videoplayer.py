@@ -7,6 +7,7 @@ from pytgcalls import StreamType
 from pytgcalls.types import Update
 from pytgcalls.types.input_stream import AudioParameters
 from pytgcalls.types.input_stream import InputAudioStream
+from pytgcalls.types.input_stream import InputStream
 from pytgcalls.types.input_stream import InputVideoStream
 from pytgcalls.types.input_stream import VideoParameters
 
@@ -92,23 +93,25 @@ async def startvideo(client, m: Message):
                     await asyncio.sleep(2)
                 await call_py.join_group_call(
                     chat_id,
-                    InputAudioStream(
-                        audio_file,
-                        AudioParameters(
-                            bitrate=48000,
-                        ),
-                    ),
-                    InputVideoStream(
-                        video_file,
-                        VideoParameters(
-                            width=854,
-                            height=480,
-                            frame_rate=20,
-                        ),
-                    ),
+InputStream(
+            InputAudioStream(
+                audio_file,
+                AudioParameters(
+                    bitrate=48000,
+                ),
+            ),
+            InputVideoStream(
+                video_file,
+                VideoParameters(
+                    width=854,
+                    height=480,
+                    frame_rate=20,
+                ),
+            ),
+        ),
                     stream_type=StreamType().local_stream,
                 )
-                await msg.edit(
+                await msg.edit (
                     "💡 **Video streaming started!**\n"
                     f"**Currently Playing**: {title}\n"
                     "\n» **join to video chat on the top to watch the video.**")
@@ -130,20 +133,22 @@ async def startvideo(client, m: Message):
                 await asyncio.sleep(2)
             await call_py.join_group_call(
                 chat_id,
-                InputAudioStream(
-                    audio_file,
-                    AudioParameters(
-                        bitrate=48000,
-                    ),
+InputStream(
+            InputAudioStream(
+                audio_file,
+                AudioParameters(
+                    bitrate=48000,
                 ),
-                InputVideoStream(
-                    video_file,
-                    VideoParameters(
-                        width=640,
-                        height=360,
-                        frame_rate=20,
-                    ),
+            ),
+            InputVideoStream(
+                video_file,
+                VideoParameters(
+                    width=640,
+                    height=360,
+                    frame_rate=20,
                 ),
+            ),
+        ),
                 stream_type=StreamType().local_stream,
             )
             await msg.edit("💡 **Video streaming started!**\n\n» **join to video chat on the top to watch the video.**")
